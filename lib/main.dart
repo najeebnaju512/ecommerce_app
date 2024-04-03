@@ -1,9 +1,12 @@
-
+import 'package:ecommerce_test/presentation/bottom_nav_bar/view/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'presentation/bottom_nav_bar/controller/bottom_nav_controller.dart';
+
 void main() {
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => BottomNavigationController()),
     // ChangeNotifierProvider(create: (context) => ),
   ], child: const MyApp()));
 }
@@ -13,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: ,
+      home: BottomNavigation(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -107,7 +107,7 @@ class GLTextStyles {
   static TextStyle maincolor16 = GoogleFonts.kanit(
     fontSize: 16,
     fontWeight: FontWeight.w400,
-    color: ColorTheme.darkClr,
+    color: ColorTheme.mainClr,
   );
   static TextStyle labeltxt24 = GoogleFonts.kanit(
     fontSize: 24,
