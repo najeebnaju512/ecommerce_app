@@ -24,49 +24,51 @@ class ProductIconCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-                height: size.height * .1,
-                child: Image(
-                    height: size.height * .1, image: NetworkImage(image!))),
-            IntrinsicHeight(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(itemName!, style: GLTextStyles.robotoStyl(size: size.width*.04)),
-                      Text("\$$price/-", style: GLTextStyles.kanitStyl(size: size.width*.04,weight: FontWeight.w500,))
-                    ],
-                  ),
-                  VerticalDivider(
-                    width: 1,
-                    color: Colors.black,
-                    thickness: 1,
-                    indent: 4,
-                    endIndent: 6,
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Add",
-                        style: GLTextStyles.poppinsStyl(weight: FontWeight.normal),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorTheme.mainClr,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5))),
+        child: Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                  height: size.width * .25,
+                  child: Image(
+                      height: size.width*.25, image: NetworkImage(image!))),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(itemName!, style: GLTextStyles.robotoStyl(size: size.width*.04)),
+                        Text("\$$price/-", style: GLTextStyles.kanitStyl(size: size.width*.04,weight: FontWeight.w500,))
+                      ],
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
+                    VerticalDivider(
+                      width: 1,
+                      color: Colors.black,
+                      thickness: 1,
+                      indent: 4,
+                      endIndent: 6,
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Add",
+                          style: GLTextStyles.poppinsStyl(weight: FontWeight.normal),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorTheme.mainClr,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
