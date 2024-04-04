@@ -1,11 +1,12 @@
 import 'dart:developer';
 
-import 'package:ecommerce_test/presentation/home_screen/view/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../home_screen/view/home_screen.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/textstyles.dart';
+import '../../product_screen/view/product_screen.dart';
 import '../controller/bottom_nav_controller.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -21,7 +22,7 @@ class BottomNavigation extends StatelessWidget {
           builder: (context, provider, child) {
             return IndexedStack(
               index: provider.currentIndex,
-              children: [HomeScreen()],
+              children: [HomeScreen(),ProductsScreen()],
             );
           },
         ),
@@ -60,13 +61,13 @@ class BottomNavigation extends StatelessWidget {
                         label: "New Order",
                         activeIcon: const Icon(Icons.shop),
                         backgroundColor: ColorTheme.white),
-                    BottomNavigationBarItem(
-                        icon: const Icon(
-                          Icons.add_shopping_cart,
-                        ),
-                        label: "Cart",
-                        activeIcon: const Icon(Icons.add_shopping_cart_sharp),
-                        backgroundColor: ColorTheme.white),
+                    // BottomNavigationBarItem(
+                    //     icon: const Icon(
+                    //       Icons.add_shopping_cart,
+                    //     ),
+                    //     label: "Cart",
+                    //     activeIcon: const Icon(Icons.add_shopping_cart_sharp),
+                    //     backgroundColor: ColorTheme.white),
                     // BottomNavigationBarItem(
                     //     icon: const Icon(
                     //       Icons.download_for_offline_outlined,

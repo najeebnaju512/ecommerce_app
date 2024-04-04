@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:ecommerce_test/core/constants/color_constants.dart';
-import 'package:ecommerce_test/core/constants/textstyles.dart';
 import 'package:ecommerce_test/core/utils/app_utils.dart';
 import 'package:ecommerce_test/presentation/bottom_nav_bar/controller/bottom_nav_controller.dart';
 import 'package:ecommerce_test/presentation/home_screen/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'widget/home_icon_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -78,38 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .isTapped = false;
                               });
                             },
-                            child: Card(
-                              color: hControl.tappedIndex == index
-                                  ? ColorTheme.mainClr
-                                  : ColorTheme.white,
-                              child: Center(
-                                child: Expanded(
-                                    child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      hControl.homeData[index]["icon"],
-                                      size: size.width * .15,
-                                      color: hControl.tappedIndex == index
-                                          ? ColorTheme.white
-                                          : ColorTheme.mainClr,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      hControl.homeData[index]["name"],
-                                      style: GLTextStyles.robotoStyl(
-                                        size: size.width * .05,
-                                        color: hControl.tappedIndex == index
-                                            ? ColorTheme.white
-                                            : ColorTheme.black,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                              ),
-                            ));
+                            child: HomeIconCard(size: size, index: index, hControl: hControl));
                       }),
                 );
               },
