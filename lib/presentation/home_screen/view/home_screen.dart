@@ -1,0 +1,79 @@
+import 'package:ecommerce_test/core/constants/color_constants.dart';
+import 'package:ecommerce_test/core/constants/textstyles.dart';
+import 'package:ecommerce_test/presentation/home_screen/controller/home_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return SafeArea(
+        child: Scaffold(
+            backgroundColor: ColorTheme.white,
+            appBar: AppBar(
+              backgroundColor: ColorTheme.white,
+              leading: Container(
+                  padding: EdgeInsets.all(7),
+                  child: CircleAvatar(
+                    minRadius: size.width * .1,
+                  )),
+              actions: [
+                Icon(Icons.menu),
+                SizedBox(
+                  width: size.width * .05,
+                )
+              ],
+            ),
+            body: Consumer<HomeController>(
+              builder: (context, hControl, child) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisSpacing: 5,
+                          crossAxisSpacing: 5,
+                          crossAxisCount: 2),
+                      itemCount: hControl.homeData.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                            onTap: () {
+                              Provider.of<HomeController>(context,
+                                      listen: false)
+                                  .checkTapped( context,index);
+                            },
+                            child: Card(
+                              color: hControl.tappedIndex==index?ColorTheme.mainClr:ColorTheme.white,
+                              child: Center(
+                                child: Expanded(
+                                    child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      hControl.homeData[index]["icon"],
+                                      size: size.width * .15,
+                                      color: hControl.tappedIndex==index?ColorTheme.white: ColorTheme.mainClr,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      hControl.homeData[index]["name"],
+                                      style: GLTextStyles.robotoStyl(
+                                          size: size.width * .05,
+                                          color:  hControl.tappedIndex==index?ColorTheme.white: ColorTheme.black,
+                                          ),
+                                    )
+                                  ],
+                                )),
+                              ),
+                            ));
+                      }),
+                );
+              },
+            )));
+  }
+}

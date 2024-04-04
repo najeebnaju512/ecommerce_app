@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ecommerce_test/presentation/home_screen/view/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size=MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -19,7 +21,7 @@ class BottomNavigation extends StatelessWidget {
           builder: (context, provider, child) {
             return IndexedStack(
               index: provider.currentIndex,
-              children: [],
+              children: [HomeScreen()],
             );
           },
         ),
@@ -42,7 +44,7 @@ class BottomNavigation extends StatelessWidget {
                   selectedItemColor: ColorTheme.mainClr,
                   showSelectedLabels: true,
                   showUnselectedLabels: true,
-                  selectedLabelStyle: GLTextStyles.bottomlabel,
+                  selectedLabelStyle: GLTextStyles.poppinsStyl(size: size.width*.03),
                   items: [
                     BottomNavigationBarItem(
                         icon: const Icon(
