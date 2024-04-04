@@ -1,5 +1,7 @@
 
 
+import 'package:ecommerce_test/core/constants/color_constants.dart';
+import 'package:ecommerce_test/core/constants/textstyles.dart';
 import 'package:flutter/material.dart';
 
 class AppUtils {
@@ -21,7 +23,7 @@ class AppUtils {
         behavior: showOnTop ? SnackBarBehavior.floating : null,
         backgroundColor: bgColor ?? Colors.white60,
         content: Text(message!, style: textStyle 
-        // ?? GLTextStyles.labeltxtred16
+        ?? GLTextStyles.robotoStyl(size: 16, weight: FontWeight.bold,color: ColorTheme.red)
         ),
         duration: Duration(seconds: time),
         margin: showOnTop

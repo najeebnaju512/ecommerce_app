@@ -1,12 +1,21 @@
+import 'dart:async';
+
 import 'package:ecommerce_test/core/constants/color_constants.dart';
 import 'package:ecommerce_test/core/constants/textstyles.dart';
+import 'package:ecommerce_test/core/utils/app_utils.dart';
+import 'package:ecommerce_test/presentation/bottom_nav_bar/controller/bottom_nav_controller.dart';
 import 'package:ecommerce_test/presentation/home_screen/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -43,10 +52,36 @@ class HomeScreen extends StatelessWidget {
                             onTap: () {
                               Provider.of<HomeController>(context,
                                       listen: false)
-                                  .checkTapped( context,index);
+                                  .checkTapped(context, index);
+                              if (index == 0) {
+                                Timer(Duration(milliseconds: 100), () {
+                                  Provider.of<BottomNavigationController>(
+                                          context,
+                                          listen: false)
+                                      .currentIndex = 3;
+                                });
+                              } else if (index == 1) {
+                                Timer(Duration(milliseconds: 100), () {
+                                  Provider.of<BottomNavigationController>(
+                                          context,
+                                          listen: false)
+                                      .currentIndex = 1;
+                                });
+                              } else {
+                                var message = "Working On Progress";
+                                AppUtils.oneTimeSnackBar(message,
+                                    context: context);
+                              }
+                              setState(() {
+                                Provider.of<HomeController>(context,
+                                        listen: false)
+                                    .isTapped = false;
+                              });
                             },
                             child: Card(
-                              color: hControl.tappedIndex==index?ColorTheme.mainClr:ColorTheme.white,
+                              color: hControl.tappedIndex == index
+                                  ? ColorTheme.mainClr
+                                  : ColorTheme.white,
                               child: Center(
                                 child: Expanded(
                                     child: Column(
@@ -55,7 +90,9 @@ class HomeScreen extends StatelessWidget {
                                     Icon(
                                       hControl.homeData[index]["icon"],
                                       size: size.width * .15,
-                                      color: hControl.tappedIndex==index?ColorTheme.white: ColorTheme.mainClr,
+                                      color: hControl.tappedIndex == index
+                                          ? ColorTheme.white
+                                          : ColorTheme.mainClr,
                                     ),
                                     SizedBox(
                                       height: 10,
@@ -63,9 +100,11 @@ class HomeScreen extends StatelessWidget {
                                     Text(
                                       hControl.homeData[index]["name"],
                                       style: GLTextStyles.robotoStyl(
-                                          size: size.width * .05,
-                                          color:  hControl.tappedIndex==index?ColorTheme.white: ColorTheme.black,
-                                          ),
+                                        size: size.width * .05,
+                                        color: hControl.tappedIndex == index
+                                            ? ColorTheme.white
+                                            : ColorTheme.black,
+                                      ),
                                     )
                                   ],
                                 )),
