@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../customer_screen/view/customer_screen.dart';
 import '../../home_screen/view/home_screen.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/textstyles.dart';
@@ -22,7 +23,7 @@ class BottomNavigation extends StatelessWidget {
           builder: (context, provider, child) {
             return IndexedStack(
               index: provider.currentIndex,
-              children: [HomeScreen(),ProductsScreen()],
+              children: [HomeScreen(),ProductsScreen(),CustumerScreen()],
             );
           },
         ),

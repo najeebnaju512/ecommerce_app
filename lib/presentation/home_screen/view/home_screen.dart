@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Provider.of<BottomNavigationController>(
                                           context,
                                           listen: false)
-                                      .currentIndex = 3;
+                                      .currentIndex = 2;
                                 });
                               } else if (index == 1) {
                                 Timer(Duration(milliseconds: 100), () {

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/color_constants.dart';
-import '../../../global_widget/search_bar_icon.dart';
-import 'widget/product_card.dart';
+import 'widget/search_bar_icon.dart';
+import '../../../global_widget/product_card.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
