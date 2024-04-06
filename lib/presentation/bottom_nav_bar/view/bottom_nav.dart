@@ -3,8 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../customer_screen/view/customer_screen.dart';
+import '../../home_screen/view/home_screen.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/textstyles.dart';
+import '../../product_screen/view/product_screen.dart';
 import '../controller/bottom_nav_controller.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -12,6 +15,7 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size=MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -19,7 +23,7 @@ class BottomNavigation extends StatelessWidget {
           builder: (context, provider, child) {
             return IndexedStack(
               index: provider.currentIndex,
-              children: [],
+              children: [HomeScreen(),ProductsScreen(),CustumerScreen()],
             );
           },
         ),
@@ -42,7 +46,7 @@ class BottomNavigation extends StatelessWidget {
                   selectedItemColor: ColorTheme.mainClr,
                   showSelectedLabels: true,
                   showUnselectedLabels: true,
-                  selectedLabelStyle: GLTextStyles.bottomlabel,
+                  selectedLabelStyle: GLTextStyles.poppinsStyl(size: size.width*.03),
                   items: [
                     BottomNavigationBarItem(
                         icon: const Icon(
@@ -58,13 +62,13 @@ class BottomNavigation extends StatelessWidget {
                         label: "New Order",
                         activeIcon: const Icon(Icons.shop),
                         backgroundColor: ColorTheme.white),
-                    BottomNavigationBarItem(
-                        icon: const Icon(
-                          Icons.add_shopping_cart,
-                        ),
-                        label: "Cart",
-                        activeIcon: const Icon(Icons.add_shopping_cart_sharp),
-                        backgroundColor: ColorTheme.white),
+                    // BottomNavigationBarItem(
+                    //     icon: const Icon(
+                    //       Icons.add_shopping_cart,
+                    //     ),
+                    //     label: "Cart",
+                    //     activeIcon: const Icon(Icons.add_shopping_cart_sharp),
+                    //     backgroundColor: ColorTheme.white),
                     // BottomNavigationBarItem(
                     //     icon: const Icon(
                     //       Icons.download_for_offline_outlined,
