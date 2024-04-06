@@ -13,7 +13,7 @@ class ProductController extends ChangeNotifier {
     notifyListeners();
     ProductService.fetchProductData().then((data) {
       if (data["error_code"] == 0) {
-        log("ProductController>fetchProduct>ProductService>fetchProductData=error_code${data['error_code']}");
+        log("ProductController>fetchProduct>ProductService>fetchProductData=error_code==>${data['error_code']}");
         productModel = ProductModel.fromJson(data);
         isLoading = false;
       } else {
