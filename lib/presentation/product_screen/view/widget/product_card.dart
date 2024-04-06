@@ -1,7 +1,8 @@
 import 'package:ecommerce_test/core/constants/textstyles.dart';
 import 'package:flutter/material.dart';
 
-import '../core/constants/color_constants.dart';
+import '../../../../config/app_config.dart';
+import '../../../../core/constants/color_constants.dart';
 
 class ProductIconCard extends StatelessWidget {
   const ProductIconCard(
@@ -13,13 +14,13 @@ class ProductIconCard extends StatelessWidget {
 
   final String? image;
   final String? itemName;
-  final double? price;
+  final String? price;
   final Size size;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
+    var imageUrl = AppConfig.mediaurl + image!;
+    return Card(
       elevation: 10,
       child: Container(
         decoration: BoxDecoration(
@@ -31,7 +32,9 @@ class ProductIconCard extends StatelessWidget {
               SizedBox(
                   height: size.width * .25,
                   child: Image(
-                      height: size.width*.25, image: NetworkImage(image!))),
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.fill,
+                  )),
               IntrinsicHeight(
                 child: Expanded(
                   child: Row(
@@ -42,8 +45,16 @@ class ProductIconCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(itemName!, style: GLTextStyles.robotoStyl(size: size.width*.04)),
-                            Text("\$$price/-", style: GLTextStyles.kanitStyl(size: size.width*.04,weight: FontWeight.w500,))
+                            Text(itemName!,
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                                style: GLTextStyles.robotoStyl(
+                                    size: size.width * .035)),
+                            Text("\$$price/-",
+                                style: GLTextStyles.kanitStyl(
+                                  size: size.width * .03,
+                                  weight: FontWeight.w500,
+                                ))
                           ],
                         ),
                       ),
@@ -54,12 +65,14 @@ class ProductIconCard extends StatelessWidget {
                         indent: 4,
                         endIndent: 6,
                       ),
+                      SizedBox(width: 5,),
                       Center(
                         child: ElevatedButton(
                           onPressed: () {},
                           child: Text(
                             "Add",
-                            style: GLTextStyles.poppinsStyl(weight: FontWeight.normal),
+                            style: GLTextStyles.poppinsStyl(
+                                weight: FontWeight.normal,size: 12),
                           ),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: ColorTheme.mainClr,
