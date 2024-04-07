@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:ecommerce_test/presentation/single_customer_screen/view/single_customer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -165,15 +167,27 @@ class _CustumerScreenState extends State<CustumerScreen> {
               return ListView.builder(
                   itemCount: cControl.customerModel.data?.length,
                   itemBuilder: (context, index) {
-                    return CustumerCard(
-                        size: size,
-                        image: cControl.customerModel.data?[index].profilePic,
-                        title: cControl.customerModel.data?[index].name,
-                        id: cControl.customerModel.data![index].id.toString(),
-                        address:
-                            "${cControl.customerModel.data?[index].street} ${cControl.customerModel.data?[index].streetTwo}",
-                        state:
-                            "${cControl.customerModel.data?[index].city} ${cControl.customerModel.data?[index].state}");
+                    return InkWell(
+                      onTap: () {
+                        Timer(Duration(milliseconds: 200), () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SingleCustomerScreen(
+                                      id: cControl
+                                          .customerModel.data?[index].id)));
+                        });
+                      },
+                      child: CustumerCard(
+                          size: size,
+                          image: cControl.customerModel.data?[index].profilePic,
+                          title: cControl.customerModel.data?[index].name,
+                          id: cControl.customerModel.data![index].id.toString(),
+                          address:
+                              "${cControl.customerModel.data?[index].street} ${cControl.customerModel.data?[index].streetTwo}",
+                          state:
+                              "${cControl.customerModel.data?[index].city} ${cControl.customerModel.data?[index].state}"),
+                    );
                   });
             },
           )),

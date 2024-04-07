@@ -87,7 +87,7 @@ class _SearchProductState extends State<SearchProduct> {
                         vertical: size.width * .05,
                         horizontal: size.width * .02,
                       ),
-                      child: sControl.searchProductModel.data == null
+                      child: sControl.searchProductModel.data == null||sControl.searchProductModel.data!.isEmpty==true
                           ? Center(
                               child: Text(
                                 "No data Found",
