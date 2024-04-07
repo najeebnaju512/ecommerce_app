@@ -1,17 +1,17 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ecommerce_test/core/utils/app_utils.dart';
-import 'package:ecommerce_test/repository/api/customer_screen/model/customer_model.dart';
-import 'package:ecommerce_test/repository/api/customer_screen/service/customer_service.dart';
+import 'package:ecommerce_test/repository/api/single_customer_screen/model/single_customer_model.dart';
+import 'package:ecommerce_test/repository/api/single_customer_screen/service/single_scustomer_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/app_config.dart';
 
-class CustomerController extends ChangeNotifier {
-  CustomerModel customerModel = CustomerModel();
+class SingleCustomerController extends ChangeNotifier {
   bool isLoading = false;
+  SingleCustomerModel singleCustomerModel = SingleCustomerModel();
   String? selectedCountry;
   String? selectedState;
 
@@ -45,24 +45,27 @@ class CustomerController extends ChangeNotifier {
     return menuItems;
   }
 
-  fetchProduct(BuildContext context) async {
+  Future fetchProduct(BuildContext context, int? id) async {
     isLoading = true;
     notifyListeners();
-    CustomerService.fetchCustomerData().then((resData) {
-      if (resData["error_code"] == 0) {
-        customerModel = CustomerModel.fromJson(resData);
+    SingleCustomerService.fetchdata(id).then((data) {
+      if (data["error_code"] == 0) {
+        singleCustomerModel = SingleCustomerModel.fromJson(data);
+        var message = data["message"];
+        AppUtils.oneTimeSnackBar(message, context: context);
         isLoading = false;
       } else {
-        var message = resData["message"];
+        var message = data["message"];
         AppUtils.oneTimeSnackBar(message, context: context);
       }
       notifyListeners();
     });
   }
-///posting customer to the feilds  
-  Future<void> onCreateCustomer(
+
+  Future<void> onEditCustomer(
     BuildContext context,
     File? image,
+    int? id,
     String name,
     String mobileNumber,
     String mail,
@@ -74,7 +77,7 @@ class CustomerController extends ChangeNotifier {
     String state,
   ) async {
     try {
-      var url = "${AppConfig.baseurl}customers/";
+      var url = "${AppConfig.baseurl}customers/?id=$id";
       onUploadImage(
         url,
         image,
@@ -91,7 +94,8 @@ class CustomerController extends ChangeNotifier {
         log("onCreateCustomer() -> status code -> ${value.statusCode}");
         if (value.statusCode == 200) {
           Navigator.pop(context);
-          AppUtils.oneTimeSnackBar("Registered", context: context, bgColor: Colors.green, time: 3);
+          AppUtils.oneTimeSnackBar("Registered",
+              context: context, bgColor: Colors.green, time: 3);
         } else {
           var message = jsonDecode(value.body)["message"];
           AppUtils.oneTimeSnackBar(message, context: context);
@@ -113,11 +117,12 @@ class CustomerController extends ChangeNotifier {
     String country,
     String state,
   ) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+    var request = http.MultipartRequest('PUT', Uri.parse(url));
     Map<String, String> headers = {"Content-type": "multipart/form-data"};
     if (selectedImage != null) {
       log("image size -> ${selectedImage.lengthSync()} B");
-      request.files.add(await http.MultipartFile.fromPath('profile_pic', selectedImage.path));
+      request.files.add(
+          await http.MultipartFile.fromPath('profile_pic', selectedImage.path));
     }
     request.fields["name"] = name;
     request.fields["mobile_number"] = mobileNumber;

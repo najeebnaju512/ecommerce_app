@@ -1,37 +1,31 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'package:ecommerce_test/presentation/search_customer_screen/view/search_customer_screen.dart';
 import 'package:ecommerce_test/presentation/single_customer_screen/controller/single_customer_controller.dart';
-import 'package:ecommerce_test/presentation/single_customer_screen/view/single_customer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../../config/app_config.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/textstyles.dart';
 import '../../../global_widget/image_icon_button.dart';
-import '../../bottom_nav_bar/controller/bottom_nav_controller.dart';
-import '../controller/customer_controller.dart';
-import 'widget/customer_card.dart';
 
-class CustumerScreen extends StatefulWidget {
-  const CustumerScreen({super.key});
-
+class SingleCustomerScreen extends StatefulWidget {
+  const SingleCustomerScreen({super.key, required this.id});
+  final int? id;
   @override
-  State<CustumerScreen> createState() => _CustumerScreenState();
+  State<SingleCustomerScreen> createState() => _SingleCustomerScreenState();
 }
 
-class _CustumerScreenState extends State<CustumerScreen> {
-  @override
+class _SingleCustomerScreenState extends State<SingleCustomerScreen> {
   void initState() {
     super.initState();
     fetchData();
   }
 
   fetchData() {
-    Provider.of<CustomerController>(context, listen: false)
-        .fetchProduct(context);
+    Provider.of<SingleCustomerController>(context, listen: false)
+        .fetchProduct(context, widget.id);
   }
 
   File? image;
@@ -55,173 +49,132 @@ class _CustumerScreenState extends State<CustumerScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: ColorTheme.white,
-            leading: IconButton(
-                onPressed: () {
-                  Provider.of<BottomNavigationController>(context,
-                          listen: false)
-                      .currentIndex = 0;
-                },
-                icon: Icon(Icons.arrow_back_ios)),
-            title: Text(
-              "Customers",
-              style: GLTextStyles.poppinsStyl(
-                  size: size.width * .05,
-                  weight: FontWeight.w700,
-                  color: ColorTheme.black),
-            ),
-            centerTitle: true,
-            actions: [
-              Icon(Icons.menu),
-              SizedBox(
-                width: size.width * .05,
-              )
-            ],
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(size.width * .1),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Container(
-                  height: size.width * .1,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: ColorTheme.black.withOpacity(.5),
-                      width: 1.0,
-                    ),
-                  ),
-                  child: Expanded(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SearchCustomerScreen()));
-                        },
-                        child: Wrap(
-                          spacing: 10,
-                          children: [
-                            SizedBox(
-                              width: 10,
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: RefreshIndicator(
+          onRefresh: () =>
+              Provider.of<SingleCustomerController>(context, listen: false)
+                  .fetchProduct(context, widget.id),
+          child: Consumer<SingleCustomerController>(
+            builder: (context, sControl, child) {
+              var imageUrl = sControl.singleCustomerModel.data?.profilePic ==
+                      null
+                  ? "https://th.bing.com/th/id/OIP.y6HMdOJ4LiIUWk7n5ZGlpAHaHa?w=480&h=480&rs=1&pid=ImgDetMain"
+                  : AppConfig.mediaurl +
+                      "${sControl.singleCustomerModel.data?.profilePic}";
+              return sControl.isLoading == true
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icon(Icons.arrow_back_ios)),
+                              ],
                             ),
-                            Icon(
-                              Icons.search,
-                              color: ColorTheme.black.withOpacity(.6),
-                            ),
-                            Text(
-                              "Search",
-                              style: GLTextStyles.kanitStyl(
-                                  color: ColorTheme.black.withOpacity(.6),
-                                  weight: FontWeight.w200),
-                            )
-                          ],
-                        ),
-                      ),
-                      IntrinsicHeight(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              Icons.qr_code,
-                              color: ColorTheme.black.withOpacity(.6),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            VerticalDivider(
-                              color: ColorTheme.black,
-                              width: 1,
-                              thickness: 1,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                //bottomsheet
-                                _addCustommer(context, size);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: ColorTheme.mainClr),
-                                child: Icon(
-                                  Icons.add,
-                                  size: size.width * .08,
+                          ),
+                          Center(
+                            child: Container(
+                              height: size.width * .7,
+                              width: size.width * .7,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(imageUrl),
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
+                                "${sControl.singleCustomerModel.data?.name}",
+                                style: GLTextStyles.poppinsStyl(
+                                    color: ColorTheme.black,
+                                    weight: FontWeight.bold,
+                                    size: 30)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
+                                "Mobile: ${sControl.singleCustomerModel.data?.mobileNumber}",
+                                style: GLTextStyles.kanitStyl(
+                                    color: ColorTheme.black,
+                                    size: 20,
+                                    weight: FontWeight.w400)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
+                                "Email: ${sControl.singleCustomerModel.data?.email}",
+                                style: GLTextStyles.kanitStyl(
+                                    color: ColorTheme.black,
+                                    size: 20,
+                                    weight: FontWeight.w400)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text("Address",
+                                style: GLTextStyles.poppinsStyl(
+                                    color: ColorTheme.black,
+                                    weight: FontWeight.bold,
+                                    size: 30)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
+                                "${sControl.singleCustomerModel.data?.street} ${sControl.singleCustomerModel.data?.streetTwo}",
+                                style: GLTextStyles.kanitStyl(
+                                    color: ColorTheme.black,
+                                    size: 20,
+                                    weight: FontWeight.w400)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
+                                "${sControl.singleCustomerModel.data?.city} ${sControl.singleCustomerModel.data?.pincode}",
+                                style: GLTextStyles.kanitStyl(
+                                    color: ColorTheme.black,
+                                    size: 20,
+                                    weight: FontWeight.w400)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _editCustommer(context, size);
+                              },
+                              child: Text(
+                                "Edit",
+                                style: GLTextStyles.poppinsStyl(
+                                    weight: FontWeight.normal, size: 12),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: ColorTheme.mainClr,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5))),
                             ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )),
-                ),
-              ),
-            ),
+                          )
+                        ],
+                      ),
+                    );
+            },
           ),
-          body: RefreshIndicator(
-            onRefresh: () =>
-                Provider.of<CustomerController>(context, listen: false)
-                    .fetchProduct(context),
-            child: Consumer<CustomerController>(
-              builder: (context, cControl, child) {
-                return cControl.isLoading == true
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ListView.builder(
-                        itemCount: cControl.customerModel.data?.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              Provider.of<SingleCustomerController>(context,
-                                      listen: false)
-                                  .fetchProduct(context,
-                                      cControl.customerModel.data?[index].id)
-                                  .then((value) =>
-                                      Timer(Duration(milliseconds: 200), () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SingleCustomerScreen(
-                                                      id: cControl.customerModel
-                                                          .data?[index].id,
-                                                    )));
-                                      }));
-                            },
-                            child: CustumerCard(
-                                size: size,
-                                image: cControl
-                                    .customerModel.data?[index].profilePic,
-                                title: cControl.customerModel.data?[index].name,
-                                id: cControl.customerModel.data![index].id
-                                    .toString(),
-                                address:
-                                    "${cControl.customerModel.data?[index].street} ${cControl.customerModel.data?[index].streetTwo}",
-                                state:
-                                    "${cControl.customerModel.data?[index].city} ${cControl.customerModel.data?[index].state}"),
-                          );
-                        });
-              },
-            ),
-          )),
-    );
+        ));
   }
 
-  Future<dynamic> _addCustommer(BuildContext context, Size size) async {
+  Future<dynamic> _editCustommer(BuildContext context, Size size) async {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -237,13 +190,13 @@ class _CustumerScreenState extends State<CustumerScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Add Customer",
+                        "Edit Customer Details",
                         style: GLTextStyles.poppinsStyl(),
                       ),
                       IconButton(
                           onPressed: () {
                             Navigator.pop(context);
-                            Provider.of<CustomerController>(context,
+                            Provider.of<SingleCustomerController>(context,
                                     listen: false)
                                 .selectedCountry = null;
                           },
@@ -320,7 +273,7 @@ class _CustumerScreenState extends State<CustumerScreen> {
                               )),
                           SizedBox(
                             width: size.width * .45,
-                            child: Consumer<CustomerController>(
+                            child: Consumer<SingleCustomerController>(
                                 builder: (context, cControl, child) {
                               return DropdownButton<String>(
                                   isExpanded: true,
@@ -351,7 +304,7 @@ class _CustumerScreenState extends State<CustumerScreen> {
                                       InputDecoration(hintText: "Pincode"))),
                           SizedBox(
                             width: size.width * .45,
-                            child: Consumer<CustomerController>(
+                            child: Consumer<SingleCustomerController>(
                                 builder: (context, cControl, child) {
                               return DropdownButton<String>(
                                   isExpanded: true,
@@ -370,10 +323,12 @@ class _CustumerScreenState extends State<CustumerScreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Provider.of<CustomerController>(context, listen: false)
-                            .onCreateCustomer(
+                        Provider.of<SingleCustomerController>(context,
+                                listen: false)
+                            .onEditCustomer(
                                 context,
                                 image,
+                                widget.id,
                                 nameControl.text,
                                 mobileControl.text,
                                 mailControl.text,
@@ -381,11 +336,11 @@ class _CustumerScreenState extends State<CustumerScreen> {
                                 street2Control.text,
                                 cityControl.text,
                                 pincodeControl.text,
-                                Provider.of<CustomerController>(context,
+                                Provider.of<SingleCustomerController>(context,
                                         listen: false)
                                     .selectedCountry
                                     .toString(),
-                                Provider.of<CustomerController>(context,
+                                Provider.of<SingleCustomerController>(context,
                                         listen: false)
                                     .selectedState
                                     .toString());
@@ -397,6 +352,13 @@ class _CustumerScreenState extends State<CustumerScreen> {
                         cityControl.clear();
                         pincodeControl.clear();
                         Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SingleCustomerScreen(
+                                      id: widget.id,
+                                    )));
                       },
                       child: Text(
                         "Submit",
