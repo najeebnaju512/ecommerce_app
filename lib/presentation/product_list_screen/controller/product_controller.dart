@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:ecommerce_test/core/utils/app_utils.dart';
-import 'package:ecommerce_test/repository/api/product_screen/model/product_model.dart';
-import 'package:ecommerce_test/repository/api/product_screen/service/product_service.dart';
+import 'package:ecommerce_test/repository/api/product_list_screen/model/product_model.dart';
+import 'package:ecommerce_test/repository/api/product_list_screen/service/product_service.dart';
 import 'package:flutter/material.dart';
 
 class ProductController extends ChangeNotifier {

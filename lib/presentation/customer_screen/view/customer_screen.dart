@@ -1,10 +1,12 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/textstyles.dart';
+import '../../../global_widget/image_icon_button.dart';
 import '../../bottom_nav_bar/controller/bottom_nav_controller.dart';
 import '../controller/customer_controller.dart';
 import 'widget/customer_card.dart';
@@ -28,6 +30,7 @@ class _CustumerScreenState extends State<CustumerScreen> {
         .fetchProduct(context);
   }
 
+  File? image;
   TextEditingController nameControl = TextEditingController();
   TextEditingController mobileControl = TextEditingController();
   TextEditingController mailControl = TextEditingController();
@@ -35,6 +38,16 @@ class _CustumerScreenState extends State<CustumerScreen> {
   TextEditingController street2Control = TextEditingController();
   TextEditingController cityControl = TextEditingController();
   TextEditingController pincodeControl = TextEditingController();
+
+  Future<void> _getImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -182,7 +195,10 @@ class _CustumerScreenState extends State<CustumerScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Add Customer"),
+                      Text(
+                        "Add Customer",
+                        style: GLTextStyles.poppinsStyl(),
+                      ),
                       IconButton(
                           onPressed: () {
                             Navigator.pop(context);
@@ -203,7 +219,42 @@ class _CustumerScreenState extends State<CustumerScreen> {
                     controller: mailControl,
                     decoration: InputDecoration(hintText: "Email"),
                   ),
-                  Text("Address"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ImageIconButton(
+                        width: size.width * .35,
+                        height: size.height * .06,
+                        onPressed: () => _getImage(ImageSource.camera),
+                        icon: Icons.camera_alt_outlined,
+                        label: 'Camera',
+                      ),
+                      ImageIconButton(
+                        width: size.width * .35,
+                        height: size.height * .06,
+                        onPressed: () => _getImage(ImageSource.gallery),
+                        icon: Icons.photo,
+                        label: 'Gallery',
+                      ),
+                    ],
+                  ),
+                  if (image != null)
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 20),
+                      height: 200,
+                      width: 200,
+                      child: Image.file(
+                        image!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  Text(
+                    "Address",
+                    style: GLTextStyles.poppinsStyl(),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -274,15 +325,25 @@ class _CustumerScreenState extends State<CustumerScreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        log("customer name -> ${nameControl.text}");
-                        log("customer mobile -> ${mobileControl.text}");
-                        log("customer email -> ${mailControl.text}");
-                        log("customer street -> ${streetControl.text}");
-                        log("customer street two -> ${street2Control.text}");
-                        log("customer city -> ${cityControl.text}");
-                        log("customer pincode -> ${pincodeControl.text}");
-                        log("country -> ${Provider.of<CustomerController>(context, listen: false).selectedCountry}");
-                        log("state selected -> ${Provider.of<CustomerController>(context, listen: false).selectedState}");
+                        Provider.of<CustomerController>(context, listen: false)
+                            .addCustomer(
+                                context,
+                                image,
+                                nameControl.text,
+                                mobileControl.text,
+                                mailControl.text,
+                                streetControl.text,
+                                street2Control.text,
+                                cityControl.text,
+                                pincodeControl.text);
+                        nameControl.clear();
+                        mobileControl.clear();
+                        mailControl.clear();
+                        streetControl.clear();
+                        street2Control.clear();
+                        cityControl.clear();
+                        pincodeControl.clear();
+                        Navigator.of(context).pop();
                       },
                       child: Text(
                         "Submit",

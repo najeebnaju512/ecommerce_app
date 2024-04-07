@@ -7,7 +7,7 @@ import '../../customer_screen/view/customer_screen.dart';
 import '../../home_screen/view/home_screen.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/textstyles.dart';
-import '../../product_screen/view/product_screen.dart';
+import '../../product_list_screen/view/product_screen.dart';
 import '../controller/bottom_nav_controller.dart';
 
 class BottomNavigation extends StatelessWidget {

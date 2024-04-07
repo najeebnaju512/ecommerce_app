@@ -1,6 +1,7 @@
 import 'package:ecommerce_test/core/constants/textstyles.dart';
 import 'package:ecommerce_test/presentation/bottom_nav_bar/controller/bottom_nav_controller.dart';
-import 'package:ecommerce_test/presentation/product_screen/controller/product_controller.dart';
+import 'package:ecommerce_test/presentation/product_list_screen/controller/product_controller.dart';
+import 'package:ecommerce_test/presentation/single_product_screen/view/single_product.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -79,13 +80,26 @@ class _ProductsScreenState extends State<ProductsScreen> {
                             ),
                             itemCount: pControl.productModel.data?.length,
                             itemBuilder: (context, index) {
-                              return ProductIconCard(
-                                image: pControl.productModel.data?[index].image,
-                                itemName:
-                                    pControl.productModel.data?[index].name,
-                                price:
-                                    "${pControl.productModel.data?[index].price}",
-                                size: size,
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SingleProductScreen(
+                                                  size: size,
+                                                  id: pControl.productModel
+                                                      .data?[index].id)));
+                                },
+                                child: ProductIconCard(
+                                  image:
+                                      pControl.productModel.data?[index].image,
+                                  itemName:
+                                      pControl.productModel.data?[index].name,
+                                  price:
+                                      "${pControl.productModel.data?[index].price}",
+                                  size: size,
+                                ),
                               );
                             }),
                       );
