@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ecommerce_test/presentation/search_customer_screen/view/search_customer_screen.dart';
+import 'package:ecommerce_test/presentation/single_customer_screen/controller/single_customer_controller.dart';
 import 'package:ecommerce_test/presentation/single_customer_screen/view/single_customer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -97,6 +99,13 @@ class _CustumerScreenState extends State<CustumerScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SearchCustomerScreen()));
+                        },
                         child: Wrap(
                           spacing: 10,
                           children: [
@@ -169,14 +178,21 @@ class _CustumerScreenState extends State<CustumerScreen> {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        Timer(Duration(milliseconds: 200), () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SingleCustomerScreen(
-                                      id: cControl
-                                          .customerModel.data?[index].id)));
-                        });
+                        Provider.of<SingleCustomerController>(context,
+                                listen: false)
+                            .fetchProduct(
+                                context, cControl.customerModel.data?[index].id)
+                            .then((value) =>
+                                Timer(Duration(milliseconds: 200), () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SingleCustomerScreen(
+                                                id: cControl.customerModel
+                                                    .data?[index].id,
+                                              )));
+                                }));
                       },
                       child: CustumerCard(
                           size: size,

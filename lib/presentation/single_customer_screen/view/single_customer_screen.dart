@@ -9,7 +9,6 @@ import '../../../core/constants/textstyles.dart';
 class SingleCustomerScreen extends StatefulWidget {
   const SingleCustomerScreen({super.key, required this.id});
   final int? id;
-
   @override
   State<SingleCustomerScreen> createState() => _SingleCustomerScreenState();
 }
@@ -85,7 +84,7 @@ class _SingleCustomerScreenState extends State<SingleCustomerScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Text(
-                                    "${sControl.singleCustomerModel.data?.mobileNumber}",
+                                    "Mobile: ${sControl.singleCustomerModel.data?.mobileNumber}",
                                     style: GLTextStyles.kanitStyl(
                                         color: ColorTheme.black,
                                         size: 20,
@@ -94,11 +93,19 @@ class _SingleCustomerScreenState extends State<SingleCustomerScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Text(
-                                    "${sControl.singleCustomerModel.data?.email}",
+                                    "Email: ${sControl.singleCustomerModel.data?.email}",
                                     style: GLTextStyles.kanitStyl(
                                         color: ColorTheme.black,
                                         size: 20,
                                         weight: FontWeight.w400)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Text("Address",
+                                    style: GLTextStyles.poppinsStyl(
+                                        color: ColorTheme.black,
+                                        weight: FontWeight.bold,
+                                        size: 30)),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 20),

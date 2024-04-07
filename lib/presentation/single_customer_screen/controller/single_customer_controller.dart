@@ -7,7 +7,7 @@ class SingleCustomerController extends ChangeNotifier {
   bool isLoading = false;
   SingleCustomerModel singleCustomerModel = SingleCustomerModel();
 
-  fetchProduct(BuildContext context, int? id) {
+  Future fetchProduct(BuildContext context, int? id) async{
     isLoading = true;
     notifyListeners();
     SingleCustomerService.fetchdata(id).then((data) {
