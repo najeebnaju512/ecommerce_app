@@ -1,13 +1,14 @@
 import 'package:ecommerce_test/core/constants/textstyles.dart';
 import 'package:ecommerce_test/presentation/bottom_nav_bar/controller/bottom_nav_controller.dart';
 import 'package:ecommerce_test/presentation/product_list_screen/controller/product_controller.dart';
+import 'package:ecommerce_test/presentation/search_product/view/search_product.dart';
 import 'package:ecommerce_test/presentation/single_product_screen/view/single_product.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/color_constants.dart';
 import 'widget/search_bar_icon.dart';
-import 'widget/product_card.dart';
+import '../../../global_widget/product_card.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -58,7 +59,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ],
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(size.width * .1),
-                child: InkWell(onTap: () {}, child: SearchBarIcon(size: size)),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchProduct()));
+                    },
+                    child: SearchBarIcon(size: size)),
               ),
             ),
             body: Consumer<ProductController>(

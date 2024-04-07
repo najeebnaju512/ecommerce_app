@@ -1,8 +1,8 @@
 import 'package:ecommerce_test/core/constants/textstyles.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../config/app_config.dart';
-import '../../../../core/constants/color_constants.dart';
+import '../config/app_config.dart';
+import '../core/constants/color_constants.dart';
 
 class ProductIconCard extends StatelessWidget {
   const ProductIconCard(
