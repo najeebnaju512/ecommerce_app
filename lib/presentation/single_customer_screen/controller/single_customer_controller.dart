@@ -56,6 +56,7 @@ class SingleCustomerController extends ChangeNotifier {
         var message = data["message"];
         AppUtils.oneTimeSnackBar(message, context: context);
       }
+      notifyListeners();
     });
   }
 

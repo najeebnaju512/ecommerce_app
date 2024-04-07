@@ -171,41 +171,52 @@ class _CustumerScreenState extends State<CustumerScreen> {
               ),
             ),
           ),
-          body: Consumer<CustomerController>(
-            builder: (context, cControl, child) {
-              return ListView.builder(
-                  itemCount: cControl.customerModel.data?.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Provider.of<SingleCustomerController>(context,
-                                listen: false)
-                            .fetchProduct(
-                                context, cControl.customerModel.data?[index].id)
-                            .then((value) =>
-                                Timer(Duration(milliseconds: 200), () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SingleCustomerScreen(
-                                                id: cControl.customerModel
-                                                    .data?[index].id,
-                                              )));
-                                }));
-                      },
-                      child: CustumerCard(
-                          size: size,
-                          image: cControl.customerModel.data?[index].profilePic,
-                          title: cControl.customerModel.data?[index].name,
-                          id: cControl.customerModel.data![index].id.toString(),
-                          address:
-                              "${cControl.customerModel.data?[index].street} ${cControl.customerModel.data?[index].streetTwo}",
-                          state:
-                              "${cControl.customerModel.data?[index].city} ${cControl.customerModel.data?[index].state}"),
-                    );
-                  });
-            },
+          body: RefreshIndicator(
+            onRefresh: () =>
+                Provider.of<CustomerController>(context, listen: false)
+                    .fetchProduct(context),
+            child: Consumer<CustomerController>(
+              builder: (context, cControl, child) {
+                return cControl.isLoading == true
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.builder(
+                        itemCount: cControl.customerModel.data?.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Provider.of<SingleCustomerController>(context,
+                                      listen: false)
+                                  .fetchProduct(context,
+                                      cControl.customerModel.data?[index].id)
+                                  .then((value) =>
+                                      Timer(Duration(milliseconds: 200), () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SingleCustomerScreen(
+                                                      id: cControl.customerModel
+                                                          .data?[index].id,
+                                                    )));
+                                      }));
+                            },
+                            child: CustumerCard(
+                                size: size,
+                                image: cControl
+                                    .customerModel.data?[index].profilePic,
+                                title: cControl.customerModel.data?[index].name,
+                                id: cControl.customerModel.data![index].id
+                                    .toString(),
+                                address:
+                                    "${cControl.customerModel.data?[index].street} ${cControl.customerModel.data?[index].streetTwo}",
+                                state:
+                                    "${cControl.customerModel.data?[index].city} ${cControl.customerModel.data?[index].state}"),
+                          );
+                        });
+              },
+            ),
           )),
     );
   }
@@ -381,9 +392,6 @@ class _CustumerScreenState extends State<CustumerScreen> {
                         street2Control.clear();
                         cityControl.clear();
                         pincodeControl.clear();
-                        setState(() {
-                          // fetchData();
-                        });
                         Navigator.of(context).pop();
                       },
                       child: Text(
