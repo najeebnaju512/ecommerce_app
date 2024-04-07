@@ -263,6 +263,10 @@ class _CustumerScreenState extends State<CustumerScreen> {
                   SizedBox(
                     height: 10,
                   ),
+                  Text(
+                    "Add Image",
+                    style: GLTextStyles.poppinsStyl(),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

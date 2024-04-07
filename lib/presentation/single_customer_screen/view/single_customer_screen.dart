@@ -216,6 +216,10 @@ class _SingleCustomerScreenState extends State<SingleCustomerScreen> {
                   SizedBox(
                     height: 10,
                   ),
+                  Text(
+                    "Add Image",
+                    style: GLTextStyles.poppinsStyl(),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

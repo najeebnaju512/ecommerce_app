@@ -60,14 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Provider.of<BottomNavigationController>(
                                           context,
                                           listen: false)
-                                      .currentIndex = 2;
+                                      .currentIndex = 1;
                                 });
                               } else if (index == 1) {
                                 Timer(Duration(milliseconds: 100), () {
                                   Provider.of<BottomNavigationController>(
                                           context,
                                           listen: false)
-                                      .currentIndex = 1;
+                                      .currentIndex = 4;
                                 });
                               } else {
                                 var message = "Working in Progress";
