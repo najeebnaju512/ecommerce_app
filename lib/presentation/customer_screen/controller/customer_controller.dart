@@ -59,76 +59,77 @@ class CustomerController extends ChangeNotifier {
       notifyListeners();
     });
   }
-///posting customer to the feilds
-  addCustomer(
-      BuildContext context,
-      File? image,
-      String name,
-      String mobile,
-      String mail,
-      String street,
-      String street2,
-      String city,
-      String pincode) async {
+///posting customer to the feilds  
+  Future<void> onCreateCustomer(
+    BuildContext context,
+    File? image,
+    String name,
+    String mobileNumber,
+    String mail,
+    String street,
+    String street2,
+    String city,
+    String pinCode,
+    String country,
+    String state,
+  ) async {
     try {
-      var finalUrl = "${AppConfig.baseurl}customers/";
-      onDataUpload(finalUrl, image, name, mobile, mail, street, street2, city,
-              pincode, selectedState.toString(), selectedCountry.toString())
-          .then((response) {
-        log("addCustomer>>${response.statusCode}");
-        if (response.statusCode == 200) {
-          var message = jsonDecode(response.body)["message"];
-          AppUtils.oneTimeSnackBar(message, context: context);
+      var url = "${AppConfig.baseurl}customers/";
+      onUploadImage(
+        url,
+        image,
+        name,
+        mobileNumber,
+        mail,
+        street,
+        street2,
+        city,
+        pinCode,
+        country,
+        state,
+      ).then((value) {
+        log("onCreateCustomer() -> status code -> ${value.statusCode}");
+        if (value.statusCode == 200) {
+          Navigator.pop(context);
+          AppUtils.oneTimeSnackBar("Registered", context: context, bgColor: Colors.green, time: 3);
         } else {
-          var message = "Failed to Create User";
+          var message = jsonDecode(value.body)["message"];
           AppUtils.oneTimeSnackBar(message, context: context);
         }
       });
-    } catch (e) {
-      log("$e");
-    }
+    } catch (e) {}
   }
 
-  Future<http.Response> onDataUpload(
-      String finalUrl,
-      File? selectedImage,
-      String name,
-      String mobile,
-      String mail,
-      String street,
-      String street2,
-      String city,
-      String pincode,
-      String selectedState,
-      String selectedCountry) async {
-    var request = http.MultipartRequest('POST', Uri.parse(finalUrl));
+  Future<http.Response> onUploadImage(
+    String url,
+    File? selectedImage,
+    String name,
+    String mobileNumber,
+    String mail,
+    String street,
+    String street2,
+    String city,
+    String pinCode,
+    String country,
+    String state,
+  ) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
     Map<String, String> headers = {"Content-type": "multipart/form-data"};
-
     if (selectedImage != null) {
-      print("Image file size: ${selectedImage.lengthSync()} bytes <<<<<<<<<<<");
-      // var request = http.MultipartRequest('POST', Uri.parse(url));
-
-      // Add image file to the request
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'profile_pic',
-          selectedImage.path,
-        ),
-      );
+      log("image size -> ${selectedImage.lengthSync()} B");
+      request.files.add(await http.MultipartFile.fromPath('profile_pic', selectedImage.path));
     }
-
-    request.fields['name'] = name;
-    request.fields['mobile_number'] = mobile;
-    request.fields['email'] = mail;
-    request.fields['street'] = street;
-    request.fields['street_two'] = street2;
-    request.fields['city'] = city;
-    request.fields['pincode'] = pincode;
-    request.fields['country'] = selectedCountry;
-    request.fields['username'] = selectedState;
-
+    request.fields["name"] = name;
+    request.fields["mobile_number"] = mobileNumber;
+    request.fields["email"] = mail;
+    request.fields["street"] = street;
+    request.fields["street_two"] = street2;
+    request.fields["city"] = city;
+    request.fields["pincode"] = pinCode;
+    request.fields["country"] = country;
+    request.fields["state"] = state;
     request.headers.addAll(headers);
-    print("request: " + request.toString());
+    log("request: $request");
     var res = await request.send();
     return await http.Response.fromStream(res);
   }

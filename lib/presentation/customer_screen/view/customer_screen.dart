@@ -356,7 +356,7 @@ class _CustumerScreenState extends State<CustumerScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         Provider.of<CustomerController>(context, listen: false)
-                            .addCustomer(
+                            .onCreateCustomer(
                                 context,
                                 image,
                                 nameControl.text,
@@ -365,7 +365,15 @@ class _CustumerScreenState extends State<CustumerScreen> {
                                 streetControl.text,
                                 street2Control.text,
                                 cityControl.text,
-                                pincodeControl.text);
+                                pincodeControl.text,
+                                Provider.of<CustomerController>(context,
+                                        listen: false)
+                                    .selectedCountry
+                                    .toString(),
+                                Provider.of<CustomerController>(context,
+                                        listen: false)
+                                    .selectedState
+                                    .toString());
                         nameControl.clear();
                         mobileControl.clear();
                         mailControl.clear();
@@ -373,6 +381,9 @@ class _CustumerScreenState extends State<CustumerScreen> {
                         street2Control.clear();
                         cityControl.clear();
                         pincodeControl.clear();
+                        setState(() {
+                          // fetchData();
+                        });
                         Navigator.of(context).pop();
                       },
                       child: Text(
