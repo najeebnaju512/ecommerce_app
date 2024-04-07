@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.all(7),
                   child: CircleAvatar(
                     minRadius: size.width * .1,
+                    child: Icon(Icons.person),
                   )),
               actions: [
                 Icon(Icons.menu),
@@ -69,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       .currentIndex = 1;
                                 });
                               } else {
-                                var message = "Working On Progress";
+                                var message = "Working in Progress";
                                 AppUtils.oneTimeSnackBar(message,
                                     context: context);
                               }
@@ -79,7 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .isTapped = false;
                               });
                             },
-                            child: HomeIconCard(size: size, index: index, hControl: hControl));
+                            child: HomeIconCard(
+                                size: size, index: index, hControl: hControl));
                       }),
                 );
               },

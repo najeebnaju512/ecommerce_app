@@ -51,6 +51,8 @@ class SingleCustomerController extends ChangeNotifier {
     SingleCustomerService.fetchdata(id).then((data) {
       if (data["error_code"] == 0) {
         singleCustomerModel = SingleCustomerModel.fromJson(data);
+        var message = data["message"];
+        AppUtils.oneTimeSnackBar(message, context: context);
         isLoading = false;
       } else {
         var message = data["message"];
