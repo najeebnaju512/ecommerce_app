@@ -87,38 +87,48 @@ class _SearchProductState extends State<SearchProduct> {
                         vertical: size.width * .05,
                         horizontal: size.width * .02,
                       ),
-                      child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 1.2 / 1,
-                          ),
-                          itemCount: sControl.searchProductModel.data?.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            SingleProductScreen(
-                                                size: size,
-                                                id: sControl.searchProductModel
-                                                    .data?[index].id)));
-                              },
-                              child: ProductIconCard(
-                                image: sControl
-                                    .searchProductModel.data?[index].image,
-                                itemName: sControl
-                                    .searchProductModel.data?[index].name,
-                                price:
-                                    "${sControl.searchProductModel.data?[index].price}",
-                                size: size,
+                      child: sControl.searchProductModel.data == null
+                          ? Center(
+                              child: Text(
+                                "No data Found",
+                                style: GLTextStyles.robotoStyl(),
                               ),
-                            );
-                          }),
+                            )
+                          : GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 1.2 / 1,
+                              ),
+                              itemCount:
+                                  sControl.searchProductModel.data?.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SingleProductScreen(
+                                                    size: size,
+                                                    id: sControl
+                                                        .searchProductModel
+                                                        .data?[index]
+                                                        .id)));
+                                  },
+                                  child: ProductIconCard(
+                                    image: sControl
+                                        .searchProductModel.data?[index].image,
+                                    itemName: sControl
+                                        .searchProductModel.data?[index].name,
+                                    price:
+                                        "${sControl.searchProductModel.data?[index].price}",
+                                    size: size,
+                                  ),
+                                );
+                              }),
                     );
         },
       ),
